@@ -2,7 +2,7 @@
 
     select SALARY
     from employee
-    order by SALARY asc ;
+    order by SALARY ;
 
 -- EMPLOYEE 테이블에서 SALARY 컬럼을 기준으로 내림차순 정렬하여 조회하시오.
 

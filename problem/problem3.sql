@@ -12,6 +12,7 @@ select
 from
     employee
 where SALARY >= 5000000;
+
 -- EMPLOYEE 테이블에서 DEPT_CODE가 'D1'이면서 SALARY가 3000000 이상인 데이터를 조회하시오.
 select
     DEPT_CODE,
@@ -35,6 +36,7 @@ select
 from
     employee
 where SALARY >= 2000000 and SALARY <= 4000000;
+
 -- EMPLOYEE 테이블에서 EMP_NAME에 '김'이 포함된 데이터를 조회하시오.
 select
     *
@@ -81,6 +83,7 @@ select
 from
     employee
 where JOB_CODE in ('J1','J2','J3');
+
 -- EMPLOYEE 테이블에서 SAL_LEVEL이 'S1', 'S2', 'S3'인 데이터를 조회하시오.
 select
     *

@@ -30,3 +30,5 @@
 -- NATION 테이블에서 NATIONAL_NAME의 별칭을 '국가명'으로 하여 조회하시오
     select
         concat('국가명');
+
+select NATIONAL_NAME as '국가명' from nation;
