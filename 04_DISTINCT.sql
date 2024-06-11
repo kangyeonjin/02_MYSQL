@@ -21,7 +21,7 @@ from tbl_category;
 -- 다중열 distinct사용
 -- 다중열의 값들이 모두 동일하면 중복된것으로 판별한다
 select distinct
-        category_code,
-       orderable_status
+    category_code,
+    orderable_status
 from
     tbl_menu;

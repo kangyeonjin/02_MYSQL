@@ -49,6 +49,7 @@ group by
 
 -- category_code, orderable_status > 그룹을 만들기
 -- 평균, 총합, 갯수
+
 select
     category_code,
     orderable_status,
@@ -59,6 +60,7 @@ from
     tbl_menu
 group by
     category_code, orderable_status;
+
 # order by orderable_status;
 
 /*having
@@ -113,12 +115,42 @@ with rollup;
 -- 컬럼두개를 활용한 rollup
 -- 메뉴가격별 총합 및 해당메뉴 가격별 같은 카테고리의 총합
 select
-    menu_price,
-    category_code,
-    count(*),
-    sum(menu_price)
+    menu_price 메뉴가격,
+    category_code 코드,
+    count(*) 갯수,
+    sum(menu_price) 총합 -- 메뉴 가격별 총합
 from
     tbl_menu
 group by
     menu_price, category_code
 with rollup ;
+
+-- 특정카테고리(카테고리로 그룹핑) 총 메뉴 가격이 20000원이상인경우
+
+    select
+     category_code,
+     sum(menu_price)
+    from tbl_menu
+    group by category_code
+    having sum(menu_price) >= 20000;
+
+-- 특정카테고리의 메뉴 구사 3개 이상인경우
+
+    select
+        category_code,
+        count(menu_code)
+    from tbl_menu
+    group by category_code
+    having count(menu_code)>=3;
+
+
+-- 특정카테고리에서 주문 가능한 메뉴의 평균가격이 10000원 이상인경우
+select
+    category_code,
+    count(*),
+    avg(menu_price)
+from
+    tbl_menu
+where orderable_status ='Y'  -- 주문 가능한 메뉴
+group by category_code
+    having avg(menu_price) >= 10000;
