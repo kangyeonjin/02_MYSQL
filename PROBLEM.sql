@@ -193,7 +193,7 @@ ORDER BY SALARY DESC;
 -- EMPLOYEE 테이블에서 각 부서별 평균 급여를 계산하고,
 -- 평균 급여가 4000000 이상인 부서의 부서명과 평균 급여를 조회하시오.
 
-    with ctemplyee as (
+    with ctemployee as (
     select
        SALARY 급여,
        DEPT_TITLE 부서명
@@ -202,7 +202,9 @@ ORDER BY SALARY DESC;
 )
 
 select *
-from ctemplyee;
+from ctemployee;
+
+
 
 
 
