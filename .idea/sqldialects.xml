@@ -5,5 +5,15 @@
     <file url="file://$PROJECT_DIR$/02-MYSQL/04_DISTINCT.sql" dialect="MySQL" />
     <file url="file://$PROJECT_DIR$/02-MYSQL/05_LIMIT.sql" dialect="MySQL" />
     <file url="file://$PROJECT_DIR$/02-MYSQL/06_JOIN.sql" dialect="MySQL" />
+    <file url="file://$PROJECT_DIR$/02-MYSQL/07_GROUPING.sql" dialect="MySQL" />
+    <file url="file://$PROJECT_DIR$/02-MYSQL/08_SUBQUERIES.sql" dialect="MySQL" />
+    <file url="file://$PROJECT_DIR$/02-MYSQL/09_SET_OPERATOR.sql" dialect="MySQL" />
+    <file url="file://$PROJECT_DIR$/02-MYSQL/10_DML.sql" dialect="MySQL" />
+    <file url="file://$PROJECT_DIR$/02-MYSQL/11_TRANSACTION.sql" dialect="MySQL" />
+    <file url="file://$PROJECT_DIR$/02-MYSQL/12_CONSTRAINTS.sql" dialect="MySQL" />
+    <file url="file://$PROJECT_DIR$/02-MYSQL/13_DDL.sql" dialect="MySQL" />
+    <file url="file://$PROJECT_DIR$/02-MYSQL/OGCLASS.sql" dialect="MySQL" />
+    <file url="file://$PROJECT_DIR$/02-MYSQL/PROBLEM.sql" dialect="MySQL" />
+    <file url="file://$PROJECT_DIR$/02-MYSQL/TestFile.sql" dialect="MySQL" />
   </component>
 </project>
