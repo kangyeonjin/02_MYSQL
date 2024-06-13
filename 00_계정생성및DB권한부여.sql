@@ -7,6 +7,7 @@ select * from user;
 #주석
 --1) 데이터베이스 생성
 create database menudb;
+create database chundb;
 -- create schema menudb; -- 이것도 같은 역할을 한다.
 
 -- MYSQL은 개념적으로 database와 스키마를 구분하지 않는다.
@@ -16,6 +17,7 @@ SHOW databases;
 -- menudb 데이터베이스에 대한. * (와일드카드로 모든 권한을 의미)
 -- 모든 권한을 준다. to (~에게) 어느 ip로 접속한 ohgiraffers 계정에게
 grant all privileges on menudb.* to 'ohgiraffers'@'%';
+grant all privileges on chundb.* to 'ohgiraffers'@'%';
 
 -- 권한 확인하기
 show grants for 'ohgiraffers'@'%';
