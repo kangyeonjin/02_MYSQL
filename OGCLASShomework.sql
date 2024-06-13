@@ -56,3 +56,6 @@ values (1, '박태근','남','Ohgiraffers-bear','bear.ohfiraffers@gmail.com','EN
        (17, '강진영','남','weed97','weed9935@gmail.com','eeee',3);
 
 select * from class_table;
+
+update class_table set mbti = '' where mbti ='eeee';
+update class_table set mbti = null where mbti ='eeee';

@@ -43,8 +43,8 @@ select * from tb2;
 
 -- alter
 -- 테이블에 추가/변경/수정/삭제를 할수있다.
-
 describe tb2;
+
 -- 열추가
 alter table tb2 add col2 int not null;
 
@@ -78,7 +78,8 @@ set global sql_mode = '';  -- date에 000넣어야 할일있을때 씀
 
 -- drop
 -- 테이블을 삭제하기 위한 구문
--- if exists를 적용하면 존재하지 않는 테이블이라도 에러가 발생하지 않는다
+-- if exists를 적용하면 존재하지 않는 테이블이라도
+#  에러가 발생하지 않는다
 create table  if not exists tb3
 (
    pk int auto_increment primary key ,
