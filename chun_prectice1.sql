@@ -448,16 +448,28 @@ join tb_professor using(department_no)
     where STUDENT_NO = 'A313047';
 
 
-
 # 2022년도에 인간관계론 과목을 수강한 학생을 찾아 학생이름과 수강학기를 표시하는 SQL 문장을 작성하시오
 
-
+select STUDENT_NAME 학생이름,
+            STUDENT_NO 학생번호,
+            TERM_NO 수강학기
+    from tb_student
+    join tb_class using (department_no)
+    join tb_grade using (student_no)
+    where CLASS_NAME = '인간관계론';
 
 
 
 # 예체능 계열 과목 중 과목 담당교수를 한명도 배정받지 못한 과목을 찾아 그 과목 이름과 학과 이름을 출력하는 SQL 문장을 작성
 
+select * from tb_department where CATEGORY ='예체능';
 
+select  department_name 학과이름,
+        class_name 과목명
+ from tb_class_professor
+join tb_class using (class_no)
+join tb_department using(department_no)
+where CATEGORY ='예체능' and PROFESSOR_NO is null;
 
 
 # 12. 춘 기술대학교 서반아어학과 학생들의 지도교수를 게시하고자 한다.
@@ -465,19 +477,48 @@ join tb_professor using(department_no)
 # "지도교수 미지정”으로 표시하도록 하는 SQL 문을 작성하시오.
 #     단, 출력헤더는 “학생이름”, “지도교수”로 표시하며 고학번 학생이 먼저 표시되도록 한다
 
+select tb_class.CLASS_NAME from tb_class order by CLASS_NAME;
+#                            where CLASS_NAME ='서반아어학과'????????????
+select * from tb_department where DEPARTMENT_NAME ='서반아어학과';
+select DEPARTMENT_NO from tb_department where DEPARTMENT_NAME ='서반아어학과';
+select COACH_PROFESSOR_NO from tb_student where COACH_PROFESSOR_NO is null
 
-
-
+    select STUDENT_NAME 학생이름,
+           IFNULL(PROFESSOR_NAME,'미지정') 지도교수  -- 지도교수가 없으면 미지정으로
+    from tb_student
+        left join tb_professor using(DEPARTMENT_NO)  -- student테이블의 모든행이 포함되고 professor가 없으면 null 반환함
+        join tb_department using(department_no)
+    where DEPARTMENT_NAME ='서반아어학과'   -- 서반아어학과 학생조회
+#           and COACH_PROFESSOR_NO is null
+    order by STUDENT_NO;        -- 학번순 정렬
 
 
 # 휴학생이 아닌 학생 중 평점이 4.0 이상인 학생을 찾아
 # 그 학생의 학번, 이름, 학과 이름, 평점을 출력하는 SQL 문을 작성
 
-
+SELECT tb_student.STUDENT_NAME 학생이름,
+           tb_grade.STUDENT_NO 학번,
+           tb_grade.POINT 평점,
+           tb_department.DEPARTMENT_NAME 학과이름
+    FROM tb_student
+    JOIN tb_department USING (DEPARTMENT_NO)
+    JOIN tb_grade USING (STUDENT_NO)
+    WHERE ABSENCE_YN = 'N' AND POINT >= 4.0;
 
 # 환경조경학과 전공과목들의 과목 별 평점을 파악할 수 있는 SQL 문을 작성하시오.
 
+select * from tb_department;  -- 학과는 여기있음 '환경조경학과'
+SELECT * FROM tb_class;   -- '과목이름'은 여기 있음 class_no
+SELECT * FROM tb_grade;   -- 평점은 여기있음
+SELECT * FROM tb_professor;  -- '환경조경학과의' 과목번호를 알아서 class_no를 조회하고자함,과목을 알기위해서
+SELECT * FROM tb_student;
+SELECT * FROM tb_class_professor; -- class_no와 교수번호가 있음, 환경조경학과 교수번호가 과목번호와 연결되어있음
 
+SELECT * FROM tb_department WHERE DEPARTMENT_NAME ='환경조경학과'; -- 034, 자연과학
+SELECT * FROM tb_professor WHERE DEPARTMENT_NO = 034; -- 034, 자연과학 -- 교수번호로 연결되있음
+SELECT * FROM tb_student WHERE DEPARTMENT_NO = 034; -- 034, 자연과학
+SELECT * FROM tb_class_professor WHERE PROFESSOR_NO IN( 'P010','P016','P060','P084','P109'); -- 034학과 교수가 가르치는 과목
+#classno의 과목이름은? class테이블에 있음
 
 # 춘 기술대학교에 다니고 있는 최경희 학생과 같은 과 학생들의 이름과 주소를 출력하는 SQL 문을 작성
 
