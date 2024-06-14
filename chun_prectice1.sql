@@ -408,15 +408,29 @@ join tb_class using (DEPARTMENT_NO);
 # 8 번의 결과 중 ‘인문사회’ 계열에 속한 과목의 교수 이름을 찾으려고 한다.
 # 이에 해당하는 과목 이름과 교수 이름을 출력하는 SQL 문을 작성
 
+select * from tb_department;
 
-
+select distinct PROFESSOR_NAME 교수이름,
+       class_name 과목이름
+from tb_professor
+join tb_class using (department_no)
+join tb_department using (department_no)
+where category = '인문사회';
 
 
 # ‘음악학과’ 학생들의 평점을 구하려고 한다.
 # 음악학과 학생들의 "학번", "학생 이름", "전체 평점"을 출력하는 SQL 문장을 작성하시오.
 # (단, 평점은 소수점 1 자리까지만 반올림하여 표시한다.)
 
-
+select
+       STUDENT_NO 학번,
+        STUDENT_NAME 학생이름,
+        round(sum(point)/count(STUDENT_NO),1) 평점
+from tb_student
+join tb_department using(department_no)
+join tb_grade using (student_no)
+where DEPARTMENT_NAME = '음악학과'
+group by STUDENT_NO;  #group by절로 묶어야 연산이 가능함
 
 
 # 9. 학번이 `A313047` 인 학생이 학교에 나오고 있지 않다.
@@ -424,8 +438,14 @@ join tb_class using (DEPARTMENT_NO);
 # 이때 사용할 SQL 문을 작성하시오.
 #      단, 출력헤더는 ‚’학과이름‛, ‚학생이름‛, ‚지도교수이름‛으로 출력되도록 한다.
 
-
-
+select distinct
+       department_name 학과이름,
+       STUDENT_NAME 학생이름,
+       professor_name 교수이름
+from tb_student
+join tb_department using(DEPARTMENT_NO)
+join tb_professor using(department_no)
+    where STUDENT_NO = 'A313047';
 
 
 
