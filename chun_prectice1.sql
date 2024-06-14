@@ -69,7 +69,6 @@ where STUDENT_NO in ('A513079' 'A513090', 'A513091', 'A513110', 'A513119');
  from tb_professor
  where DEPARTMENT_NO is null;
 
-
 # 혹시 전산상의 착오로 학과가 지정되어 있지 않은 학생이 있는지 확인하고자 한다.
 
     select * from tb_student
@@ -90,7 +89,6 @@ where STUDENT_NO in ('A513079' 'A513090', 'A513091', 'A513110', 'A513119');
            DEPARTMENT_NO
     from tb_class
     where CLASS_TYPE = '전공필수';
-
 
 # 춘 대학에는 어떤 계열(CATEGORY)들이 있는지 조회
 
@@ -239,11 +237,15 @@ select STR_TO_DATE('69/10/11','%y/%m/%d');
 
     select * from tb_student;
 
-    select STUDENT_NO,
-           STUDENT_NAME
-    from tb_student
+    select STUDENT_NO 학생번호,
+           STUDENT_NAME 학생이름,
+           POINT 학점
+    from tb_student a
+    JOIN tb_grade b on (b.STUDENT_NO = a.STUDENT_NO)
     where STUDENT_NO = 'A517178';
 
+
+# [인터넷 답안]
 #     SELECT ROUND(AVG(POINT),1) 평점
 #     FROM
 #         tb_grade
@@ -253,121 +255,155 @@ select STR_TO_DATE('69/10/11','%y/%m/%d');
 # 학과별 학생수를 구하여 "학과번호",
 # "학생수(명)" 의 형태로 헤더를 만들어 결과값이 출력되도록 하시오.
 
-# SELECT
-#     DEPARTMENT_NO 학과번호,
-#     COUNT(*) 학생수
-#     FROM
-#         tb_department d
-# JOIN tb_student s ON(s.DEPARTMENT_NO= d.DEPARTMENT_NO)
-# group by d.DEPARTMENT_NO
-# order by 1;
-
-# 지도 교수를 배정받지 못한 학생의 수는 몇 명 정도 되는 알아내는 SQL 문을 작성하시오
+    select CAPACITY 학생수명,
+            department_name 학과이름,
+            DEPARTMENT_NO 학과번호
+    from
+        tb_department;
+#order by 1에서 1은 첫번째 선택된열에서 정렬하라는 것
 
 
+# 지도 교수를 배정받지 못한 학생의 수는
+# 몇 명 정도 되는 알아내는 SQL 문을 작성하시오
 
-
-# select count(*),
-#        from tb_student
-# where COACH_PROFESSOR_NO is null;
-
-
+select count(*)
+from tb_student
+where COACH_PROFESSOR_NO is null;
 
 # 학번이 A112113 인 김고운 학생의 년도 별 평점을 구하는 SQL 문을 작성하시오.
 # 단, 이때 출력 화면의 헤더는 "년도",
 # "년도 별 평점" 이라고 찍히게 하고, 점수는 반올림하여 소수점 이하 한자리까지만 표시한다.
 
+select substring(TERM_NO,1,4) from tb_grade;
 
-#     select substr(TERM_NO,1,4),
-#            round(avg(POINT),1)
-#     from tb_grade
-#     where STUDENT_NO = 'A112113'
-#     group by substr(TERM_NO, 1,4)
-#     order by 1;
+select * from tb_grade;
 
+    select STUDENT_NAME 학생이름,
+           round(avg(POINT),1) 년도별평점, -- 점수반올림하여 소수점이하 한자리까지만 표시
+           substring(TERM_NO,1,4)  -- 년도만 뽑아서 보여줌(월단위 없앰)
+    from tb_student a
+    join tb_grade b on (a.student_no = b.student_no)
+    where a.STUDENT_NO = 'A112113' -- 김고운학생을 검색
+    group by TERM_NO
+    order by TERM_NO desc ;
 
 # 학과 별 휴학생 수를 파악하고자 한다.
-# 학과 번호와 휴학생 수를 표시하는 SQL 문장을 작성하시오.
+# 학과 번호와 휴학생 수를 표시
 
-# select
-#     DEPARTMENT_NO,
-#     count(decode(tb_student.ABSENCE_YN,'Y',1))
-# from tb_student
-# group by DEPARTMENT_NO
-# order by 1;
+select  * from tb_student;
+select  * from tb_department;
 
+select ABSENCE_YN,
+       count(*)
+from tb_student
+group by  ABSENCE_YN;
+
+    select DEPARTMENT_NO  as 학과번호,
+           department_name 학과이름,
+            sum(ABSENCE_YN = 'Y') as 휴학생수
+    from tb_student a
+    join tb_department b using (DEPARTMENT_NO)
+    group by ABSENCE_YN , DEPARTMENT_NO;
 
 # 춘 대학교에 다니는 동명이인(同名異人) 학생들의 이름을 찾고자 한다.
-# 어떤 SQL 문장을 사용하면 가능하겠는가
 
+select * from tb_student;
 
-# select
-#     tb_student.STUDENT_NAME,
-#     count(*)
-# from tb_student
-# group by STUDENT_NAME
-# having count(*) >1
-# order by 1;
-
-
-# 학번이 A112113 인 김고운 학생의 년도, 학기 별 평점과 년도 별 누적 평점 ,
-# 총평점을 구하는 SQL 문을 작성하시오. (단, 평점은 소수점 1 자리까지만 반올림하여 표시한다.
-
-# select NVL(SUBSTR(TERM_NO,1,4),' '),
-#        NVL(SUBSTR(TERM_NO,5,2),' '),
-#        ROUND(AVG(POINT),1)
-# FROM tb_grade
-# WHERE STUDENT_NO ='A112113'
-# group by ROLLUP(SUBSTR(TERM_NO,1,4),SUBSTR(TERM_NO,5,2));
-
+select STUDENT_NAME
+from tb_student
+group by STUDENT_NAME
+having count(*)  > 1;
+-- group by로 묶어준 그룹의 행수를 count하는데
+-- 1보다 큰거는 특정열에서 중복된값이 있는 그룹만 선택하게됨??? 모르겠음
 
 # 학생이름과 주소지를 표시하시오.
 # 단, 출력 헤더는 "학생 이름", "주소지"로 하고, 정렬은 이름으로 오름차순 표시하도록 한다.
 
+select * from tb_student;
 
-
-
+select STUDENT_NAME 학생이름,
+       STUDENT_ADDRESS 주소지
+from tb_student
+order by STUDENT_NAME;
 
 # 휴학중인 학생들의 이름과 주민번호를 나이가 적은 순서로 화면에 출력하시오.
 
-
-
+select ABSENCE_YN,
+       STUDENT_NAME,
+        student_ssn
+from tb_student
+order by STUDENT_SSN;
 
 # 주소지가 강원도나 경기도인 학생들 중 2020년대 학번을 가진 학생들의
 # 이름과 학번, 주소를 이름의 오름차순으로 화면에 출력하시오.
 # 단, 출력헤더에는 "학생이름","학번", "거주지 주소" 가 출력되도록 한다.
+select * from tb_student;
+select * from tb_grade;
+#학기번호에 년도가 기재되있음, 학기번호는 GRADE에 있음
 
-
-
+select STUDENT_ADDRESS 거주지주소,
+       STUDENT_NAME 학생이름,
+       STUDENT_NO 학번,
+       TERM_NO 학기번호
+from tb_student
+join tb_grade using (STUDENT_NO)
+where STUDENT_ADDRESS LIKE '%강원도%' OR STUDENT_ADDRESS LIKE '%경기도%'
+      AND TERM_NO LIKE '2020%'
+order by STUDENT_NAME;
 
 # 현재 법학과 교수 중 가장 나이가 많은 사람부터 이름을 확인핛 수 있는 SQL 문장을 작성하시오.
 # (법학과의 '학과코드'는 학과 테이블(TB_DEPARTMENT)을 조회해서 찾아 내도록 하자)
+SELECT * FROM tb_professor;
+SELECT * FROM tb_department;
 
-
-
+SELECT PROFESSOR_SSN 주민번호,
+       PROFESSOR_NAME 교수이름
+FROM tb_professor
+JOIN tb_department USING (DEPARTMENT_NO)
+WHERE DEPARTMENT_NAME = '법학과'
+ORDER BY PROFESSOR_SSN;
 
 # 2022 년 2학기에 C3118100 과목을 수강한 학생들의 학점을 조회하려고 한다.
 # 학점이 높은 학생부터 표시하고,
 # 학점이 같으면 학번이 낮은 학생부터 표시하는 구문을 작성해보시오
+select * from tb_class;
 
-
-
-
+# SELECT distinct STUDENT_NAME,
+#        POINT,
+#        class_no
+# from tb_student  join tb_grade using (student_no)
+# join tb_class  using(class_no)
+# where class_no = 'C3118100'
+# order by POINT desc, STUDENT_NO asc;
 
 # 학생 번호, 학생 이름, 학과 이름을 학생 이름으로 오름차순 정렬하여 출력하는 SQL 문을 작성
+SELECT * FROM tb_student;
+select * from tb_department;
+select * from tb_grade;
 
+SELECT distinct tb_grade.STUDENT_NO 학생번호,
+       tb_student.STUDENT_NAME 학생이름,
+       tb_department.DEPARTMENT_NAME 학과이름
+FROM tb_student
+    JOIN tb_department using(department_no)
+    join tb_grade using(student_no)
+order by STUDENT_NAME;
 
+# 춘 기술대학교의 과목 이름과 과목의 학과 이름을 출력
 
+select distinct DEPARTMENT_NAME 학과이름,
+       class_name 과목이름
+from tb_department
+join tb_class using (department_no);
 
-# 춘 기술대학교의 과목 이름과 과목의 학과 이름을 출력하는 SQL 문장을 작성하시오.
+# 과목별 교수 이름을 찾으려고 한다. 과목 이름과 교수 이름을 출력
+SELECT * FROM tb_class;
+SELECT * FROM tb_professor;
 
-
-
-# 과목별 교수 이름을 찾으려고 한다. 과목 이름과 교수 이름을 출력하는 SQL 문을 작성하시오.
-
-
-
-
+SELECT PROFESSOR_NAME 교수이름,
+       CLASS_NAME 과목이름
+from tb_professor
+join tb_class using (DEPARTMENT_NO);
 
 # 8 번의 결과 중 ‘인문사회’ 계열에 속한 과목의 교수 이름을 찾으려고 한다.
 # 이에 해당하는 과목 이름과 교수 이름을 출력하는 SQL 문을 작성
