@@ -507,18 +507,31 @@ SELECT tb_student.STUDENT_NAME 학생이름,
 
 # 환경조경학과 전공과목들의 과목 별 평점을 파악할 수 있는 SQL 문을 작성하시오.
 
-select * from tb_department;  -- 학과는 여기있음 '환경조경학과'
-SELECT * FROM tb_class;   -- '과목이름'은 여기 있음 class_no
-SELECT * FROM tb_grade;   -- 평점은 여기있음
-SELECT * FROM tb_professor;  -- '환경조경학과의' 과목번호를 알아서 class_no를 조회하고자함,과목을 알기위해서
-SELECT * FROM tb_student;
-SELECT * FROM tb_class_professor; -- class_no와 교수번호가 있음, 환경조경학과 교수번호가 과목번호와 연결되어있음
+  select DEPARTMENT_NO,
+           DEPARTMENT_NAME
+    from tb_department
+    where DEPARTMENT_NAME = '환경조경학과';
 
-SELECT * FROM tb_department WHERE DEPARTMENT_NAME ='환경조경학과'; -- 034, 자연과학
-SELECT * FROM tb_professor WHERE DEPARTMENT_NO = 034; -- 034, 자연과학 -- 교수번호로 연결되있음
-SELECT * FROM tb_student WHERE DEPARTMENT_NO = 034; -- 034, 자연과학
-SELECT * FROM tb_class_professor WHERE PROFESSOR_NO IN( 'P010','P016','P060','P084','P109'); -- 034학과 교수가 가르치는 과목
-#classno의 과목이름은? class테이블에 있음
+    select DEPARTMENT_NO,
+           CLASS_NO
+    from tb_class
+    where DEPARTMENT_NO in (select DEPARTMENT_NO
+                             from tb_department
+                             where DEPARTMENT_NAME = '환경조경학과');
+
+
+    select distinct point 평점,
+           CLASS_NO 환경조경학과과목,
+           class_name 과목이름
+    from tb_grade
+    join tb_class using(class_no)
+    where CLASS_NO in (select CLASS_NO
+                       from tb_class
+                       where DEPARTMENT_NO in (select DEPARTMENT_NO
+                                               from tb_department
+                                               where DEPARTMENT_NAME = '환경조경학과'));
+
+
 
 # 춘 기술대학교에 다니고 있는 최경희 학생과 같은 과 학생들의 이름과 주소를 출력하는 SQL 문을 작성
 
