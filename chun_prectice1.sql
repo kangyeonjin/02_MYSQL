@@ -535,17 +535,27 @@ SELECT tb_student.STUDENT_NAME 학생이름,
 
 # 춘 기술대학교에 다니고 있는 최경희 학생과 같은 과 학생들의 이름과 주소를 출력하는 SQL 문을 작성
 
-
-
+SELECT STUDENT_NAME 학생이름,
+       STUDENT_ADDRESS 학생주소
+      FROM tb_student
+         WHERE DEPARTMENT_NO in(select DEPARTMENT_NO  -- 최경희와 같은 학과번호를 가진사람을 메인 쿼리 조건에 넣음
+         FROM tb_student
+             WHERE STUDENT_NAME = '최경희');
 
 # 국어국문학과에서 총 평점이 가장 높은 학생의 이름과 학번을 표시하는 SQL 문을 작성하시
 
+select point 평점,
+       STUDENT_NAME 학생이름,
+       STUDENT_NO 학번
+from tb_student
+join tb_grade using (STUDENT_NO)
+where DEPARTMENT_NO in(
+select DEPARTMENT_NO from tb_department
+         where DEPARTMENT_NAME = '국어국문학과')
+order by POINT desc;
 
 
 
-# 춘 기술대학교의 "환경조경학과"가 속한 같은 계열 학과들의
-# 학과 별 전공과목 평점을 파악하기 위한 적절한 SQL 문을 찾아내시오. 단, 출력헤더는 "계열 학과명",
-# "전공평점"으로 표시되도록 하고, 평점은 소수점 한 자리까지만 반올림하여 표시되도록 한다.
 
 
 
